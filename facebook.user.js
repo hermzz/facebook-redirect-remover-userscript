@@ -18,15 +18,14 @@ function replace_uris()
 		} else {
 			links[i].href = cleanURL(links[i].href);
 		}
+
+		links[i].onmousedown = '';
 	}
 }
 
 function cleanURL(url)
 {
 	url = decodeURIComponent(url);
-	
-	console.log(url);
-	console.log(url.indexOf('?'));
 
 	if(url.indexOf('?') > -1)
 		url = url.substring(0, url.indexOf('?'));
