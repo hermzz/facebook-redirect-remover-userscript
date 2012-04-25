@@ -7,32 +7,31 @@
 
 function replace_uris()
 {
-	// replace normal news items
-	containers = document.getElementsByClassName('external uiAttachmentMedia');
-	for(var i=0; i<containers.length; i++)
+	links = document.querySelectorAll('a[href*="news.read"]');
+
+	for(var i=0; i<links.length; i++)
 	{
-		c = containers[i];
-		r = c.href.match(/redirect_uri=(.+)%3F/);
-		if(r)
+		r = links[i].href.match(/redirect_uri=(.+)%3F/);
+		if (r)
 		{
-			url = decodeURIComponent(r[1]);
-			c.href = url;
-			c.nextSibling.childNodes[0].childNodes[0].childNodes[0].href = url;
-			c.parentElement.parentElement.previousSibling.childNodes[2].href= url;
+			links[i].href = cleanURL(r[1]);
+		} else {
+			links[i].href = cleanURL(links[i].href);
 		}
 	}
+}
 
-	// replace links on popup hovercard thingies
-	containers = document.getElementsByClassName('HovercardStage');
-	for(var i=0; i<containers.length; i++)
-	{
-		c = containers[i];
-		href = c.childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].href;
-		r = href.match(/redirect_uri=(.+)%3F/);
+function cleanURL(url)
+{
+	url = decodeURIComponent(url);
+	
+	console.log(url);
+	console.log(url.indexOf('?'));
 
-		if(r)
-			c.childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].href = decodeURIComponent(r[1]);
-	}
+	if(url.indexOf('?') > -1)
+		url = url.substring(0, url.indexOf('?'));
+
+	return url;
 }
 
 // listen to changes in the DOM
